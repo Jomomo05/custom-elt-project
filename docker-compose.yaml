@@ -64,6 +64,22 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  api:
+    build:
+      context: ./api  # The directory containing the Dockerfile for FastAPI
+    ports:
+      - '8000:8000'
+    networks:
+      - elt_network
+    environment:
+      POSTGRES_DB: destination_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_HOST: destination_postgres
+      POSTGRES_PORT: 5432
+    depends_on:
+      - destination_postgres
+
 networks:
   elt_network:
     driver: bridge
